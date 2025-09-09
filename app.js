@@ -2,16 +2,43 @@ const express = require('express')
 const movies = require('./movies.json')
 const crypto = require('node:crypto')
 const { validateMovie, validatePartialMovie } = require('./schemas/movies.js')
+const cors = require('cors')
 
 // inicializamos express
 const app = express()
-
-const PORT = process.env.PORT ?? 3000
 
 // middlewares
 // deshabilita la cabecera x-powered-by
 app.disable('x-powered-by')
 app.use(express.json())
+
+// Configuracion de CORS
+// app.use(cors()) // permite cualquier origen
+// app.use(cors({ origin: 'http://localhost:3000' })) // permite solo este origen
+// app.use(cors({ origin: ['http://localhost:3000', 'http://127.0.0.1:5500'] })) // permite estos dos origenes
+// app.use(cors({ origin: '*' })) // permite cualquier origen, no recomendado para produccion
+app.use(cors({
+  origin: (origin, callback) => {
+    const ACCEPTED_ORIGINS = [
+      'http://localhost:3000',
+      'http://127.0.0.1:5500',
+      'https://myapp.com'
+    ]
+
+    if (!origin || ACCEPTED_ORIGINS.includes(origin)) {
+      return callback(null, true)
+    }
+
+    return callback(new Error('Origin not allowed by CORS'))
+  }
+}
+))
+
+// metodos normales: get/head/post
+// metodos complejos: put/patch/delete
+
+// CORS PREFLIGHT
+// OPTIONS
 
 // todos los recursos que sean movies se identifican como /movies
 app.get('/movies', (req, res) => {
@@ -73,6 +100,21 @@ app.patch('/movies/:id', (req, res) => {
   res.json(updatedMovie)
 })
 
+app.delete('/movies/:id', (req, res) => {
+  const { id } = req.params
+  const movieIndex = movies.findIndex(movie => movie.id === id)
+
+  if (movieIndex === -1) {
+    return res.status(404).json({ message: 'Movie not found' })
+  }
+
+  movies.splice(movieIndex, 1)
+
+  return res.json({ message: 'Movie deleted' })
+})
+
+const PORT = process.env.PORT ?? 3000
+
 app.listen(PORT, () => {
-  console.log(`server listening on port http://localhost:${PORT} - app.js:77`)
+  console.log(`server listening on port http://localhost:${PORT} - app.js:119`)
 })
