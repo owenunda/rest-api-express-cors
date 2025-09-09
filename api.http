@@ -12,11 +12,10 @@ POST http://localhost:3000/movies
 Content-Type: application/json
 
 {
-  "title": "Avatar",
-  "year": 2009,
-  "director": "James Cameron",
-  "duration": 162,
-  "poster": "https://i.etsystatic.com/35681979/r/il/dfe3ba/3957859451/il_fullxfull.3957859451_h27r.jpg",
-  "genre": ["Action", "Adventure", "Fantasy"],
-  "rate": 7.8
+  "title": "The Social Network",
+  "year": 2010,
+  "director": "David Fincher",
+  "duration": 120,
+  "poster": "https://i.pinimg.com/originals/7e/37/b9/7e37b994b613e94cba64f307b1983e39.jpg",
+  "genre": ["Biography", "Drama"]
 }

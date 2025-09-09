@@ -1,7 +1,7 @@
 const express = require('express')
 const movies = require('./movies.json')
 const crypto = require('node:crypto')
-const { validateMovie } = require('./validators')
+const { validateMovie } = require('./schemas/movies.js')
 
 // inicializamos express
 const app = express()
@@ -36,29 +36,14 @@ app.get('/movies/:id', (req, res) => {
 app.post('/movies', (req, res) => {
   const result = validateMovie(req.body)
   if (result.error) {
-    return res.status(400).json({ error: result.error.message })
+    // 422 es un status code que indica que la peticion es correcta pero el servidor no puede procesarla
+    return res.status(400).json({ error: JSON.parse(result.error.message) })
   }
-
-  const {
-    title,
-    genre,
-    year,
-    director,
-    duration,
-    rate,
-    poster
-  } = req.body
 
   // esto no es REST porque estamos guardando el estado de la aplicacion en memoria
   const newMovie = {
     id: crypto.randomUUID(),
-    title,
-    genre,
-    year,
-    director,
-    duration,
-    rate: rate ?? 0,
-    poster
+    ...result.data
   }
 
   movies.push(newMovie)
@@ -67,5 +52,5 @@ app.post('/movies', (req, res) => {
 })
 
 app.listen(PORT, () => {
-  console.log(`server listening on port http://localhost:${PORT} - app.js:70`)
+  console.log(`server listening on port http://localhost:${PORT} - app.js:55`)
 })
