@@ -137,14 +137,4 @@
   "poster": "https://i.pinimg.com/originals/7e/37/b9/7e37b994b613e94cba64f307b1983e39.jpg",
   "genre": ["Biography", "Drama"],
   "rate": 7.7
-},
-{
-  "id": "6a360a18-c645-4b47-9a7b-2a71babbf3e0",
-  "title": "Avatar",
-  "year": 2009,
-  "director": "James Cameron",
-  "duration": 162,
-  "poster": "https://i.etsystatic.com/35681979/r/il/dfe3ba/3957859451/il_fullxfull.3957859451_h27r.jpg",
-  "genre": ["Action", "Adventure", "Fantasy"],
-  "rate": 7.8
 }]
