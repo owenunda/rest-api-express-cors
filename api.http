@@ -19,3 +19,12 @@ Content-Type: application/json
   "poster": "https://i.pinimg.com/originals/7e/37/b9/7e37b994b613e94cba64f307b1983e39.jpg",
   "genre": ["Biography", "Drama"]
 }
+
+### actualizar una pelicula 
+
+PATCH http://localhost:3000/movies/dcdd0fad-a94c-4810-8acc-5f108d3b18c3
+Content-Type: application/json
+
+{
+  "year": 2003
+}

@@ -1,7 +1,7 @@
 const express = require('express')
 const movies = require('./movies.json')
 const crypto = require('node:crypto')
-const { validateMovie } = require('./schemas/movies.js')
+const { validateMovie, validatePartialMovie } = require('./schemas/movies.js')
 
 // inicializamos express
 const app = express()
@@ -46,11 +46,33 @@ app.post('/movies', (req, res) => {
     ...result.data
   }
 
+  // añadimos la nueva pelicula al array de peliculas, esto se hara luego en una base de datos
   movies.push(newMovie)
 
   res.status(201).json(newMovie)
 })
 
+app.patch('/movies/:id', (req, res) => {
+  const { id } = req.params
+  const result = validatePartialMovie(req.body)
+
+  if (result.error) {
+    return res.status(400).json({ error: JSON.parse(result.error.message) })
+  }
+  const movieIndex = movies.findIndex(movie => movie.id === id)
+
+  if (movieIndex === -1) return res.status(404).json({ message: 'Movie not found' })
+
+  const updatedMovie = {
+    ...movies[movieIndex],
+    ...result.data
+  }
+
+  movies[movieIndex] = updatedMovie
+
+  res.json(updatedMovie)
+})
+
 app.listen(PORT, () => {
-  console.log(`server listening on port http://localhost:${PORT} - app.js:55`)
+  console.log(`server listening on port http://localhost:${PORT} - app.js:77`)
 })
